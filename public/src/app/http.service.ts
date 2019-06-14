@@ -17,6 +17,11 @@ export class HttpService {
     // subscribe to the Observable and provide the code we would like to do with our data from the response
     tempObservable.subscribe(data => console.log("Got our tasks!", data));
   }
+
+  getIndex(){
+    return this._http.get('/');
+  }
+
   getPokemon(){
     let mew = this._http.get('https://pokeapi.co/api/v2/pokemon/mew/');
     mew.subscribe(data => {
