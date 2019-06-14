@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    RestFul Tasks API\n  </h1>\n  </div>\n<h2>All the tasks</h2>\n<ul *ngFor=\"let m of messages\">\n  <li>\n    <h2>{{m}}</h2>\n  </li>\n</ul>\n<h2>The third Task</h2>\n<ul>\n  <li>\n    <h2><input type=\"text\" [value]=\"thisMessage\"></h2>\n  </li>\n</ul>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    RestFul Tasks API\n  </h1>\n  <button (click)=\"thismessage()\">show movie</button>\n  </div>\n<h2>All the tasks</h2>\n<ul *ngFor=\"let m of messages ;let i =index\">\n  <li>\n    <button (click)=\"discription(i)\">show me</button><h2>{{m.title}}</h2>\n  </li>\n</ul>\n<h2>The third Task</h2>\n<ul>\n  <li>\n    <h2>{{ dis }}</h2>\n    <h2><input type=\"text\" [value]=\"thismsg\"></h2>\n  </li>\n</ul>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -87,6 +87,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./http.service */ "./src/app/http.service.ts");
+
 
 
 // @Component({
@@ -96,12 +98,27 @@ __webpack_require__.r(__webpack_exports__);
 // })
 // export class AppComponent {
 //   title = 'app';
-//    constructor(private _httpService: HttpService){}
+//    
 // }
 let AppComponent = class AppComponent {
+    constructor(_httpService) {
+        this._httpService = _httpService;
+    }
     ngOnInit() {
-        this.messages = ['learn Angular', "Manipulate", "Bind events"];
-        this.thisMessage = "this will be at input";
+        // this.thismsg;
+        // this.messages;
+    }
+    discription(i) {
+        this.dis = this.messages[i].description;
+        console.log(this.dis);
+    }
+    thismessage() {
+        let tempObservable = this._httpService.getIndex();
+        tempObservable.subscribe(data => {
+            console.log("got our data!", data);
+            this.thismsg = data[0].title;
+            this.messages = data;
+        });
     }
 };
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -109,7 +126,8 @@ AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         selector: 'app-root',
         template: __webpack_require__(/*! raw-loader!./app.component.html */ "./node_modules/raw-loader/index.js!./src/app/app.component.html"),
         styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
-    })
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"]])
 ], AppComponent);
 
 
@@ -180,17 +198,14 @@ __webpack_require__.r(__webpack_exports__);
 let HttpService = class HttpService {
     constructor(_http) {
         this._http = _http;
-        this.getTasks();
         this.getPokemon();
     }
     getTasks() {
-        // our http response is an Observable, store it in a variable
         let tempObservable = this._http.get('/task');
-        // subscribe to the Observable and provide the code we would like to do with our data from the response
         tempObservable.subscribe(data => console.log("Got our tasks!", data));
     }
     getIndex() {
-        return this._http.get('/');
+        return this._http.get('/movie');
     }
     getPokemon() {
         let mew = this._http.get('https://pokeapi.co/api/v2/pokemon/mew/');

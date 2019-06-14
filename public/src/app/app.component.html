@@ -3,17 +3,19 @@
   <h1>
     RestFul Tasks API
   </h1>
+  <button (click)="thismessage()">show movie</button>
   </div>
 <h2>All the tasks</h2>
-<ul *ngFor="let m of messages">
+<ul *ngFor="let m of messages ;let i =index">
   <li>
-    <h2>{{m}}</h2>
+    <button (click)="discription(i)">show me</button><h2>{{m.title}}</h2>
   </li>
 </ul>
 <h2>The third Task</h2>
 <ul>
   <li>
-    <h2><input type="text" [value]="thisMessage"></h2>
+    <h2>{{ dis }}</h2>
+    <h2><input type="text" [value]="thismsg"></h2>
   </li>
 </ul>
 
