@@ -30,7 +30,18 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    New Task\n  </h1>\n  <form (submit)=\"onSubmit()\">\n    <!-- use the json pipe to see how newTask changes in real time -->\n    <p> {{ newTask | json }} </p>\n    <input type=\"text\" name=\"newTask.title\" [(ngModel)]=\"newTask.title\" />\n    <input type=\"text\" name=\"newTask.description\" [(ngModel)]=\"newTask.description\" />\n    <input type=\"submit\" value=\"Create Task\" />\n  </form>\n  <div *ngIf=\"toggleEditBool == true\">\n    <form  (submit)=\"onEdit()\">\n        <h2>Edit Task</h2>\n        <!-- use the json pipe to see how newTask changes in real time -->\n        <p> {{ editTask | json }} </p>\n        <input type=\"text\" name=\"editTask.title\" [(ngModel)]=\"editTask.title\" value=\"{{editTask.title}}\" />\n        <input type=\"text\" name=\"editTask.description\" [(ngModel)]=\"editTask.description\" value=\"{{editTask.description}}\" />\n        <input type=\"submit\" value=\"Edit Task\" />\n    </form>\n  </div>\n  <!-- <button (click)=\"thismessage()\">show movie</button> -->\n</div>\n<h1>task List</h1>\n<ul *ngFor=\"let m of movies ;let i =index\">\n  <li>\n    <div style=\"height: 200px; width: 200px; border: solid 1px black\">\n      <h2>{{m.title}}</h2>\n      <h2>{{m.description}}</h2>\n      <h2>{{m._id}}</h2>\n      <!-- <button (click)=\"let show = !show\">edit</button> -->\n      <button (click)=\"onDelete(m._id)\">delete</button>\n      <button (click)=\"toggleEdit(i)\">edit</button>\n    </div>\n  </li>\n</ul>\n\n\n<router-outlet></router-outlet>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    New Task\n  </h1>\n  <form (submit)=\"onSubmit()\">\n    <!-- use the json pipe to see how newTask changes in real time -->\n    <p> {{ newTask | json }} </p>\n    <input type=\"text\" name=\"newTask.title\" [(ngModel)]=\"newTask.title\" />\n    <input type=\"text\" name=\"newTask.description\" [(ngModel)]=\"newTask.description\" />\n    <input type=\"submit\" value=\"Create Task\" />\n  </form>\n  <div *ngIf=\"toggleEditBool == true\">\n    <form  (submit)=\"onEdit()\">\n        <h2>Edit Task</h2>\n        <!-- use the json pipe to see how newTask changes in real time -->\n        <p> {{ editTask | json }} </p>\n        <input type=\"text\" name=\"editTask.title\" [(ngModel)]=\"editTask.title\" value=\"{{editTask.title}}\" />\n        <input type=\"text\" name=\"editTask.description\" [(ngModel)]=\"editTask.description\" value=\"{{editTask.description}}\" />\n        <input type=\"submit\" value=\"Edit Task\" />\n    </form>\n  </div>\n  <!-- <button (click)=\"thismessage()\">show movie</button> -->\n</div>\n<h1>task List</h1>\n<ul *ngFor=\"let m of movies ;let i =index\">\n  <li>\n    <div style=\"height: 200px; width: 200px; border: solid 1px black\">\n      <h2>{{m.title}}</h2>\n      <h2>{{m.description}}</h2>\n      <h2>{{m._id}}</h2>\n      <!-- <button (click)=\"let show = !show\">edit</button> -->\n      <button (click)=\"onDelete(m._id)\">delete</button>\n      <button (click)=\"toggleEdit(i)\">edit</button>\n      <button (click)=\"toggleAppDescription(m.description)\">show des</button>\n    </div>\n  </li>\n</ul>\n<app-description *ngIf=\"passDescription\" [appDesDescription]=\"passDescription\"></app-description>\n\n\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/index.js!./src/app/description/description.component.html":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/raw-loader!./src/app/description/description.component.html ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"border: solid 1px black\">\n  <p>{{appDesDescription}}</p>\n</div>\n"
 
 /***/ }),
 
@@ -126,6 +137,10 @@ let AppComponent = class AppComponent {
             this.movies = data;
         });
     }
+    toggleAppDescription(d) {
+        this.passDescription = d;
+        console.log(this.passDescription);
+    }
     onSubmit() {
         let observable = this._httpService.postIndex(this.newTask);
         observable.subscribe(data => {
@@ -182,6 +197,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./http.service */ "./src/app/http.service.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _description_description_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./description/description.component */ "./src/app/description/description.component.ts");
+
 
 
 
@@ -195,7 +212,8 @@ let AppModule = class AppModule {
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [
-            _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]
+            _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
+            _description_description_component__WEBPACK_IMPORTED_MODULE_8__["DescriptionComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -207,6 +225,53 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
     })
 ], AppModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/description/description.component.css":
+/*!*******************************************************!*\
+  !*** ./src/app/description/description.component.css ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2Rlc2NyaXB0aW9uL2Rlc2NyaXB0aW9uLmNvbXBvbmVudC5jc3MifQ== */"
+
+/***/ }),
+
+/***/ "./src/app/description/description.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/description/description.component.ts ***!
+  \******************************************************/
+/*! exports provided: DescriptionComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DescriptionComponent", function() { return DescriptionComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let DescriptionComponent = class DescriptionComponent {
+    constructor() { }
+    ngOnInit() {
+    }
+};
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+], DescriptionComponent.prototype, "appDesDescription", void 0);
+DescriptionComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-description',
+        template: __webpack_require__(/*! raw-loader!./description.component.html */ "./node_modules/raw-loader/index.js!./src/app/description/description.component.html"),
+        styles: [__webpack_require__(/*! ./description.component.css */ "./src/app/description/description.component.css")]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+], DescriptionComponent);
 
 
 

@@ -32,9 +32,11 @@
       <!-- <button (click)="let show = !show">edit</button> -->
       <button (click)="onDelete(m._id)">delete</button>
       <button (click)="toggleEdit(i)">edit</button>
+      <button (click)="toggleAppDescription(m.description)">show des</button>
     </div>
   </li>
 </ul>
+<app-description *ngIf="passDescription" [appDesDescription]="passDescription"></app-description>
 
 
 <router-outlet></router-outlet>

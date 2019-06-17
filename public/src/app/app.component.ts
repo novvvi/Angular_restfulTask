@@ -24,6 +24,7 @@ export class AppComponent implements OnInit{
   newTask: any;
   editTask: any;
   toggleEditBool: boolean;
+  passDescription: string;
 
   constructor(private _httpService: HttpService){}
 
@@ -52,6 +53,11 @@ export class AppComponent implements OnInit{
       console.log("got our data!", data);
       this.movies = data;
     });
+  }
+
+  toggleAppDescription(d : string): void {
+    this.passDescription = d;
+    console.log(this.passDescription)
   }
 
   onSubmit() {
