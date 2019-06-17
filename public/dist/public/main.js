@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    RestFul Tasks API\n  </h1>\n  <button (click)=\"thismessage()\">show movie</button>\n  </div>\n<h2>All the tasks</h2>\n<ul *ngFor=\"let m of messages ;let i =index\">\n  <li>\n    <button (click)=\"discription(i)\">show me</button><h2>{{m.title}}</h2>\n  </li>\n</ul>\n<h2>The third Task</h2>\n<ul>\n  <li>\n    <h2>{{ dis }}</h2>\n    <h2><input type=\"text\" [value]=\"thismsg\"></h2>\n  </li>\n</ul>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    New Task\n  </h1>\n  <form (submit)=\"onSubmit()\">\n    <!-- use the json pipe to see how newTask changes in real time -->\n    <p> {{ newTask | json }} </p>\n    <input type=\"text\" name=\"newTask.title\" [(ngModel)]=\"newTask.title\" />\n    <input type=\"text\" name=\"newTask.description\" [(ngModel)]=\"newTask.description\" />\n    <input type=\"submit\" value=\"Create Task\" />\n  </form>\n  <div *ngIf=\"toggleEditBool == true\">\n    <form  (submit)=\"onEdit()\">\n        <h2>Edit Task</h2>\n        <!-- use the json pipe to see how newTask changes in real time -->\n        <p> {{ editTask | json }} </p>\n        <input type=\"text\" name=\"editTask.title\" [(ngModel)]=\"editTask.title\" value=\"{{editTask.title}}\" />\n        <input type=\"text\" name=\"editTask.description\" [(ngModel)]=\"editTask.description\" value=\"{{editTask.description}}\" />\n        <input type=\"submit\" value=\"Edit Task\" />\n    </form>\n  </div>\n  <!-- <button (click)=\"thismessage()\">show movie</button> -->\n</div>\n<h1>task List</h1>\n<ul *ngFor=\"let m of movies ;let i =index\">\n  <li>\n    <div style=\"height: 200px; width: 200px; border: solid 1px black\">\n      <h2>{{m.title}}</h2>\n      <h2>{{m.description}}</h2>\n      <h2>{{m._id}}</h2>\n      <!-- <button (click)=\"let show = !show\">edit</button> -->\n      <button (click)=\"onDelete(m._id)\">delete</button>\n      <button (click)=\"toggleEdit(i)\">edit</button>\n    </div>\n  </li>\n</ul>\n\n\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -105,20 +105,50 @@ let AppComponent = class AppComponent {
         this._httpService = _httpService;
     }
     ngOnInit() {
-        // this.thismsg;
-        // this.messages;
+        this.Movie();
+        this.newTask = { title: "", description: "" };
+        this.editTask = { title: "", description: "" };
+        this.toggleEditBool = false;
     }
-    discription(i) {
-        this.dis = this.messages[i].description;
+    description(i) {
+        this.dis = this.movies[i].description;
         console.log(this.dis);
     }
-    thismessage() {
+    toggleEdit(i) {
+        this.toggleEditBool = true;
+        this.editTask.title = this.movies[i].title;
+        this.editTask.description = this.movies[i].description;
+    }
+    Movie() {
         let tempObservable = this._httpService.getIndex();
         tempObservable.subscribe(data => {
             console.log("got our data!", data);
-            this.thismsg = data[0].title;
-            this.messages = data;
+            this.movies = data;
         });
+    }
+    onSubmit() {
+        let observable = this._httpService.postIndex(this.newTask);
+        observable.subscribe(data => {
+            console.log("got our data!", data);
+            this.newTask = { title: "", description: "" };
+        });
+        this.Movie();
+    }
+    onDelete(i) {
+        console.log(i);
+        let observable = this._httpService.deleteIndex(i);
+        observable.subscribe(data => {
+            console.log("got our data!", data);
+        });
+        this.Movie();
+    }
+    onEdit() {
+        let observable = this._httpService.updateIndex(this.editTask);
+        observable.subscribe(data => {
+            console.log("got our data!", data);
+            this.editTask = { title: "", description: "" };
+        });
+        this.toggleEditBool = false;
     }
 };
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -151,6 +181,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./http.service */ "./src/app/http.service.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+
 
 
 
@@ -168,7 +200,8 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"]
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_7__["FormsModule"]
         ],
         providers: [_http_service__WEBPACK_IMPORTED_MODULE_5__["HttpService"]],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
@@ -198,7 +231,6 @@ __webpack_require__.r(__webpack_exports__);
 let HttpService = class HttpService {
     constructor(_http) {
         this._http = _http;
-        this.getPokemon();
     }
     getTasks() {
         let tempObservable = this._http.get('/task');
@@ -207,23 +239,15 @@ let HttpService = class HttpService {
     getIndex() {
         return this._http.get('/movie');
     }
-    getPokemon() {
-        let mew = this._http.get('https://pokeapi.co/api/v2/pokemon/mew/');
-        mew.subscribe(data => {
-            console.log("mew weight:", data.weight);
-            var typeURL = data.types[0].type.url;
-            var abilitiesURL = data.abilities[0].ability.url;
-            let typethis = this._http.get(typeURL);
-            typethis.subscribe(data1 => {
-                console.log(data1);
-            });
-            let pokemon = this._http.get(abilitiesURL);
-            pokemon.subscribe(data => {
-                console.log(`There are ${data["pokemon"].length} pokemon has the same ability as mew`);
-            });
-        });
+    postIndex(newtask) {
+        return this._http.post("/create", newtask);
     }
-    ;
+    updateIndex(edittask) {
+        return this._http.put("/update", edittask);
+    }
+    deleteIndex(index) {
+        return this._http.delete(`/delete/${index}`);
+    }
 };
 HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

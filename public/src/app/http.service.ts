@@ -8,8 +8,8 @@ export class HttpService {
 
 
   constructor(private _http: HttpClient){
-    this.getPokemon();
   }
+
   getTasks(){
     let tempObservable = this._http.get('/task');
     tempObservable.subscribe(data => console.log("Got our tasks!", data));
@@ -19,22 +19,34 @@ export class HttpService {
     return this._http.get('/movie');
   }
 
-  getPokemon(){
-    let mew = this._http.get('https://pokeapi.co/api/v2/pokemon/mew/');
-    mew.subscribe(data => {
-      console.log("mew weight:", data.weight)
-      var typeURL = data.types[0].type.url;
-      var abilitiesURL = data.abilities[0].ability.url
+  postIndex(newtask){
+    return this._http.post("/create", newtask);
+  }
+
+  updateIndex(edittask){
+    return this._http.put("/update", edittask);
+  }
+
+  deleteIndex(index){
+    return this._http.delete(`/delete/${index}`);
+  }
+
+  // getPokemon(){
+  //   let mew = this._http.get('https://pokeapi.co/api/v2/pokemon/mew/');
+  //   mew.subscribe(data => {
+  //     console.log("mew weight:", data.weight)
+  //     var typeURL = data.types[0].type.url;
+  //     var abilitiesURL = data.abilities[0].ability.url
       
-      let typethis = this._http.get(typeURL);
-      typethis.subscribe(data1 => {
-        console.log(data1);
-      });
+  //     let typethis = this._http.get(typeURL);
+  //     typethis.subscribe(data1 => {
+  //       console.log(data1);
+  //     });
       
-      let pokemon = this._http.get(abilitiesURL);
-      pokemon.subscribe(data => {
-        console.log(`There are ${data["pokemon"].length} pokemon has the same ability as mew`);
-      });
-    });
-  };
+  //     let pokemon = this._http.get(abilitiesURL);
+  //     pokemon.subscribe(data => {
+  //       console.log(`There are ${data["pokemon"].length} pokemon has the same ability as mew`);
+  //     });
+  //   });
+  // };
 }

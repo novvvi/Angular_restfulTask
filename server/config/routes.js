@@ -14,11 +14,12 @@ module.exports = (app) => {
         Books.create(req,res);
     })
 
-    app.put("/", (req, res) => {
+    app.put("/update", (req, res) => {
+        console.log(req.body)
         Books.update(req, res);
     })
 
-    app.delete("/", (req, res) => {
+    app.delete("/delete/:id", (req, res) => {
         Books.remove(req, res);
     })
 }

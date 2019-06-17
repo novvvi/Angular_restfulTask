@@ -1,22 +1,40 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    RestFul Tasks API
+    New Task
   </h1>
-  <button (click)="thismessage()">show movie</button>
+  <form (submit)="onSubmit()">
+    <!-- use the json pipe to see how newTask changes in real time -->
+    <p> {{ newTask | json }} </p>
+    <input type="text" name="newTask.title" [(ngModel)]="newTask.title" />
+    <input type="text" name="newTask.description" [(ngModel)]="newTask.description" />
+    <input type="submit" value="Create Task" />
+  </form>
+  <div *ngIf="toggleEditBool == true">
+    <form  (submit)="onEdit()">
+        <h2>Edit Task</h2>
+        <!-- use the json pipe to see how newTask changes in real time -->
+        <p> {{ editTask | json }} </p>
+        <input type="text" name="editTask.title" [(ngModel)]="editTask.title" value="{{editTask.title}}" />
+        <input type="text" name="editTask.description" [(ngModel)]="editTask.description" value="{{editTask.description}}" />
+        <input type="submit" value="Edit Task" />
+    </form>
   </div>
-<h2>All the tasks</h2>
-<ul *ngFor="let m of messages ;let i =index">
+  <!-- <button (click)="thismessage()">show movie</button> -->
+</div>
+<h1>task List</h1>
+<ul *ngFor="let m of movies ;let i =index">
   <li>
-    <button (click)="discription(i)">show me</button><h2>{{m.title}}</h2>
+    <div style="height: 200px; width: 200px; border: solid 1px black">
+      <h2>{{m.title}}</h2>
+      <h2>{{m.description}}</h2>
+      <h2>{{m._id}}</h2>
+      <!-- <button (click)="let show = !show">edit</button> -->
+      <button (click)="onDelete(m._id)">delete</button>
+      <button (click)="toggleEdit(i)">edit</button>
+    </div>
   </li>
 </ul>
-<h2>The third Task</h2>
-<ul>
-  <li>
-    <h2>{{ dis }}</h2>
-    <h2><input type="text" [value]="thismsg"></h2>
-  </li>
-</ul>
+
 
 <router-outlet></router-outlet>

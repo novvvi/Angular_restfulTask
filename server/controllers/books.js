@@ -4,8 +4,9 @@ var Books = mongoose.model("Books");
 
 module.exports = {
     create: (req, res) => {
-        Books.create({title: req.query.title, 
-            description: req.query.description, 
+        console.log(req);
+        Books.create({title: req.body.title, 
+            description: req.body.description, 
             completed: req.query.completed
         },
         (err) => {
@@ -41,7 +42,8 @@ module.exports = {
     },
 
     update: (req, res) => {
-        Books.findOneAndUpdate({title: req.query.title}, {$set: req.query}, (err) => {
+        console.log(req.body);
+        Books.findOneAndUpdate({title: req.body.title}, req.body, {new: true}, (err) => {
             if (err) {
                 res.json(err);
             }
@@ -52,7 +54,7 @@ module.exports = {
     },
 
     remove: (req, res) => {
-        Books.deleteOne({_id: req.query._id}, (err) =>{
+        Books.deleteOne({_id: req.params.id}, (err) =>{
             if (err) {
                 res.json(err);
             }
